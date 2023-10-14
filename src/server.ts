@@ -1,5 +1,6 @@
 import cors from '@fastify/cors'
 import Fastify from 'fastify'
+import userRoutes from './routes/userRoutes'
 
 async function bootstrap() {
   const fastify = Fastify({
@@ -9,6 +10,8 @@ async function bootstrap() {
   await fastify.register(cors, {
     origin: true,
   })
+
+  await fastify.register(userRoutes)
 
   await fastify.listen({
     port: 3333,
