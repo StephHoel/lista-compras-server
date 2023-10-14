@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "@rocketseat/eslint-config/react"
+  ],
+  "rules":{
+    "react-hooks/exhaustive-deps": 0,
+    "array-callback-return": 0
+  }
+}
