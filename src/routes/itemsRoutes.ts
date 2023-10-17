@@ -2,21 +2,25 @@ import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { prisma } from '../lib/prisma'
 
-export async function itemsRoutes(fastify: FastifyInstance) {
+export default async function itemsRoutes(fastify: FastifyInstance) {
   fastify.post('/items', async (request, reply) => {
     try {
-      const validateItem = z.object({
-        idOauth: z.string(),
+      const validateItemHeader = z.object({
+        iduser: z.string(),
+      })
+
+      const validateItemBody = z.object({
         item: z.string(),
         qtd: z.number(),
         price: z.number(),
       })
 
-      const { idOauth, item, price, qtd } = validateItem.parse(request.body)
+      const { iduser } = validateItemHeader.parse(request.headers)
+      const { item, price, qtd } = validateItemBody.parse(request.body)
 
       const items = await prisma.items.create({
         data: {
-          idOauth,
+          idUser: iduser,
           item,
           price,
           qtd,
@@ -34,23 +38,22 @@ export async function itemsRoutes(fastify: FastifyInstance) {
 
   fastify.get('/items', async (request, reply) => {
     try {
-      const validateItem = z.object({
-        idOauth: z.string(),
+      const validateItemHeader = z.object({
+        iduser: z.string(),
       })
 
-      const { idOauth } = validateItem.parse(request.body)
+      const { iduser } = validateItemHeader.parse(request.headers)
 
       const items = await prisma.items.findMany({
         where: {
-          idOauth,
+          idUser: iduser,
         },
         orderBy: {
           item: 'asc',
         },
       })
 
-      if (!items)
-        return reply.status(400).send({ message: 'FAIL: Items not found' })
+      if (!items) return reply.status(404).send({ message: 'Items not found' })
 
       return reply.status(200).send(items)
     } catch {
@@ -58,22 +61,26 @@ export async function itemsRoutes(fastify: FastifyInstance) {
     }
   })
 
-  fastify.put('/items/:id', async (request, reply) => {
+  fastify.put('/items', async (request, reply) => {
     try {
-      const validateItem = z.object({
-        id: z.string(),
-        idOauth: z.string(),
+      const validateItemHeader = z.object({
+        iduser: z.string(),
+      })
+
+      const validateItemBody = z.object({
+        idItem: z.string(),
         item: z.string(),
         qtd: z.number(),
         price: z.number(),
       })
 
-      const { id, idOauth, item, price, qtd } = validateItem.parse(request.body)
+      const { iduser } = validateItemHeader.parse(request.headers)
+      const { idItem, item, price, qtd } = validateItemBody.parse(request.body)
 
       const items = await prisma.items.update({
         where: {
-          id,
-          idOauth,
+          idItem,
+          idUser: iduser,
         },
         data: {
           item,
@@ -92,19 +99,23 @@ export async function itemsRoutes(fastify: FastifyInstance) {
     }
   })
 
-  fastify.delete('/items/:id', async (request, reply) => {
+  fastify.delete('/items/:idItem', async (request, reply) => {
     try {
-      const validateItem = z.object({
-        id: z.string(),
-        idOauth: z.string(),
+      const validateItemHeader = z.object({
+        iduser: z.string(),
       })
 
-      const { id, idOauth } = validateItem.parse(request.body)
+      const validateItemParams = z.object({
+        idItem: z.string(),
+      })
+
+      const { idItem } = validateItemParams.parse(request.params)
+      const { iduser } = validateItemHeader.parse(request.headers)
 
       const items = await prisma.items.delete({
         where: {
-          id,
-          idOauth,
+          idItem,
+          idUser: iduser,
         },
       })
 

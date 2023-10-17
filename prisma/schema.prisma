@@ -7,20 +7,24 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  id      String  @id @default(uuid())
-  idOauth String  @unique
-  Items   Items[]
-}
-
-model Items {
-  id        String   @id @default(uuid())
-  item      String
-  qtd       Float
-  price     Float
-  idOauth   String
+model user {
+  idUser    String   @id @default(uuid())
+  username  String   @unique
+  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  user User @relation(fields: [idOauth], references: [idOauth])
+  items items[]
+}
+
+model items {
+  idItem    String   @id @default(uuid())
+  idUser    String
+  item      String
+  qtd       Float
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  user user @relation(fields: [idUser], references: [idUser])
 }

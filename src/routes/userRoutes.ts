@@ -5,33 +5,32 @@ import { prisma } from '../lib/prisma'
 export default async function userRoutes(fastify: FastifyInstance) {
   fastify.post('/user', async (request, reply) => {
     try {
-      const validateUser = z.object({
-        idOauth: z.string(),
+      const validateUserBody = z.object({
+        username: z.string(),
+        password: z.string(),
       })
 
-      const { idOauth } = validateUser.parse(request.body)
+      const { username, password } = validateUserBody.parse(request.body)
 
-      const user = await prisma.user.findUnique({
+      let user = await prisma.user.findUnique({
         where: {
-          idOauth,
+          username,
+          password,
         },
       })
 
       if (!user) {
-        await prisma.user.create({
+        user = await prisma.user.create({
           data: {
-            idOauth,
+            username,
+            password,
           },
         })
       }
 
-      return reply
-        .status(200)
-        .send({ message: 'User registered or logged successfully' })
+      return reply.status(201).send(user)
     } catch {
-      return reply
-        .status(400)
-        .send({ message: 'FAIL: User not registered or logged' })
+      return reply.status(400).send({ message: 'FAIL: User not registered' })
     }
   })
 }
