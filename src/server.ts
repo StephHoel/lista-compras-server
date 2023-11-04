@@ -4,6 +4,7 @@ import Fastify from 'fastify'
 import userRoutes from './routes/userRoutes'
 import itemsRoutes from './routes/itemsRoutes'
 import postRoutes from './routes/postRoutes'
+import loginRoutes from './routes/loginRoutes'
 
 async function bootstrap() {
   const fastify = Fastify({
@@ -18,6 +19,7 @@ async function bootstrap() {
   await fastify.register(userRoutes)
   await fastify.register(itemsRoutes)
   await fastify.register(postRoutes)
+  await fastify.register(loginRoutes)
 
   await fastify.listen({
     port: 3333,
