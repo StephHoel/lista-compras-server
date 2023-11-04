@@ -28,3 +28,33 @@ model items {
 
   user user @relation(fields: [idUser], references: [idUser])
 }
+
+// FOR BLOG
+model Login {
+  idLogin   String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  username  String   @unique
+  password  String
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  posts     Post[]
+}
+
+model Post {
+  idPost    String   @id @default(uuid())
+  idAuthor  String
+  title     String
+  content   String
+  state     State    @default(DRAFT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    Login    @relation(fields: [idAuthor], references: [idLogin])
+}
+
+enum State {
+  DRAFT
+  POST
+  DELETE
+}
