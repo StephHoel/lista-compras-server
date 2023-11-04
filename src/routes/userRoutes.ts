@@ -28,7 +28,7 @@ export default async function userRoutes(fastify: FastifyInstance) {
         })
       }
 
-      return reply.status(201).send(user)
+      return reply.status(201).send({ idUser: user.idUser })
     } catch {
       return reply.status(400).send({ message: 'FAIL: User not registered' })
     }
