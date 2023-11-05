@@ -1,10 +1,10 @@
 import cors from '@fastify/cors'
 import Fastify from 'fastify'
 
-import userRoutes from './routes/userRoutes'
 import itemsRoutes from './routes/itemsRoutes'
-import postRoutes from './routes/postRoutes'
 import loginRoutes from './routes/loginRoutes'
+import postRoutes from './routes/postRoutes'
+import userRoutes from './routes/userRoutes'
 
 async function bootstrap() {
   const fastify = Fastify({
@@ -13,7 +13,10 @@ async function bootstrap() {
 
   await fastify.register(cors, {
     // só permite requisições vindas do site abaixo, qualquer outra deve ser ignorada
-    origin: ['https://stephhoel.github.io/lista-de-compras/'],
+    origin: [
+      'https://stephhoel.github.io/lista-de-compras/',
+      'http://localhost:3000/lista-de-compras',
+    ],
   })
 
   await fastify.register(userRoutes)
