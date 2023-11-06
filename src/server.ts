@@ -12,11 +12,9 @@ async function bootstrap() {
   })
 
   await fastify.register(cors, {
+    // origin: true,
     // só permite requisições vindas do site abaixo, qualquer outra deve ser ignorada
-    origin: [
-      'https://stephhoel.github.io/lista-de-compras/',
-      'http://localhost:3000/lista-de-compras',
-    ],
+    origin: ['https://stephhoel.github.io/lista-de-compras/'],
   })
 
   await fastify.register(userRoutes)
