@@ -32,7 +32,6 @@ model items {
 // FOR BLOG
 model Login {
   idLogin   String   @id @default(uuid())
-  name      String
   email     String   @unique
   username  String   @unique
   password  String

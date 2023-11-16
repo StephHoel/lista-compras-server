@@ -7,19 +7,15 @@ export default async function loginRoutes(fastify: FastifyInstance) {
     try {
       const validatePostBody = z.object({
         email: z.string().trim(),
-        name: z.string().trim(),
         username: z.string().trim(),
         password: z.string().trim(),
       })
 
-      const { email, name, username, password } = validatePostBody.parse(
-        request.body,
-      )
+      const { email, username, password } = validatePostBody.parse(request.body)
 
       const login = await prisma.login.create({
         data: {
           email,
-          name,
           username,
           password,
         },
@@ -68,14 +64,13 @@ export default async function loginRoutes(fastify: FastifyInstance) {
       })
 
       const validateLoginBody = z.object({
-        name: z.string().trim(),
         email: z.string().trim(),
         username: z.string().trim(),
         password: z.string().trim(),
       })
 
       const { idlogin } = validateLoginHeader.parse(request.headers)
-      const { name, email, username, password } = validateLoginBody.parse(
+      const { email, username, password } = validateLoginBody.parse(
         request.body,
       )
 
@@ -84,7 +79,6 @@ export default async function loginRoutes(fastify: FastifyInstance) {
           idLogin: idlogin,
         },
         data: {
-          name,
           email,
           username,
           password,
