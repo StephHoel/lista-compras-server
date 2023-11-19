@@ -2,8 +2,6 @@ import cors from '@fastify/cors'
 import Fastify from 'fastify'
 
 import itemsRoutes from './routes/itemsRoutes'
-import loginRoutes from './routes/loginRoutes'
-import postRoutes from './routes/postRoutes'
 import userRoutes from './routes/userRoutes'
 
 async function bootstrap() {
@@ -19,8 +17,6 @@ async function bootstrap() {
 
   await fastify.register(userRoutes)
   await fastify.register(itemsRoutes)
-  await fastify.register(postRoutes)
-  await fastify.register(loginRoutes)
 
   await fastify.listen({
     port: 3333,
