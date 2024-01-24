@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import { prisma } from '../lib/prisma'
+import { prisma } from '../../lib/prisma'
 
 export default async function userRoutes(fastify: FastifyInstance) {
   fastify.post('/user', async (request, reply) => {
